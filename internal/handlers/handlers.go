@@ -16,18 +16,18 @@ import (
 func MainHandler(w http.ResponseWriter, r *http.Request) {
 	wd, err := os.Getwd()
 	if err != nil {
-		http.Error(w, "Failed to determine working directory", http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Failed to determine working directory: %v", err), http.StatusInternalServerError)
 		return
 	}
 
 	filePath := filepath.Join(wd, "../index.html")
 	data, err := os.ReadFile(filePath)
 	if err != nil {
-		http.Error(w, "Failed to read index.html", http.StatusInternalServerError)
+		http.Error(w, fmt.Sprintf("Failed to read index.html: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	w.Header().Set("Content-Type", "text/html")
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(data)
 }
